@@ -8,6 +8,8 @@ stages:
   - stage: CI
     displayName: "Build CI"
     jobs:
+
+      # ----------------- FRONTEND -----------------
       - job: BuildFrontend
         displayName: "Build Frontend"
         steps:
@@ -18,10 +20,11 @@ stages:
           
           - script: |
               cd tp4/frontend
-              npm install   # en lugar de npm ci si no tenés package-lock.json válido
+              npm install   # si no tenés package-lock.json válido
               npm run build
             displayName: "Instalar dependencias y compilar frontend"
 
+      # ----------------- ADMIN API -----------------
       - job: BuildAdminApi
         displayName: "Compilar admin-api"
         steps:
@@ -36,6 +39,7 @@ stages:
               go build ./...
             displayName: "Compilar admin-api"
 
+      # ----------------- SEARCH API -----------------
       - job: BuildSearchApi
         displayName: "Compilar search-api"
         steps:
@@ -48,6 +52,7 @@ stages:
               go build ./...
             displayName: "Compilar search-api"
 
+      # ----------------- CURSOS API -----------------
       - job: BuildCursosApi
         displayName: "Compilar cursos-api"
         steps:
@@ -60,6 +65,7 @@ stages:
               go build ./...
             displayName: "Compilar cursos-api"
 
+      # ----------------- USERS API -----------------
       - job: BuildUsersApi
         displayName: "Compilar users-api"
         steps:
@@ -71,3 +77,15 @@ stages:
               go mod tidy
               go build ./...
             displayName: "Compilar users-api"
+
+      # ----------------- LEVANTAR CONTENEDORES -----------------
+      - job: LevantarTodo
+        displayName: "Levantar todos los servicios con Docker Compose"
+        steps:
+          - task: DockerInstaller@0
+            displayName: "Instalar Docker"
+          
+          - script: |
+              docker-compose -f docker-compose.yml build
+              docker-compose -f docker-compose.yml up -d
+            displayName: "Construir y levantar todos los contenedores"
