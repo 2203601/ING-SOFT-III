@@ -37,7 +37,7 @@ stages:
         displayName: "Compilar admin-api"
         steps:
           - script: |
-              brew install go@1.24
+              brew install go@1.24 || true
               export PATH="/usr/local/opt/go@1.24/bin:$PATH"
               go version
             displayName: "Instalar Go 1.24 vía Homebrew"
@@ -46,7 +46,7 @@ stages:
               cd tp4/backend/admin-api
               go mod tidy
               mkdir -p dist/bin
-              go build -o dist/bin/admin-api ./...
+              go build -o dist/bin/admin-api ./cmd/admin-api
             displayName: "Compilar admin-api"
 
           - task: PublishPipelineArtifact@1
@@ -60,7 +60,7 @@ stages:
         displayName: "Compilar search-api"
         steps:
           - script: |
-              brew install go@1.24
+              brew install go@1.24 || true
               export PATH="/usr/local/opt/go@1.24/bin:$PATH"
               go version
             displayName: "Instalar Go 1.24 vía Homebrew"
@@ -69,7 +69,7 @@ stages:
               cd tp4/backend/search-api
               go mod tidy
               mkdir -p dist/bin
-              go build -o dist/bin/search-api ./...
+              go build -o dist/bin/search-api ./cmd/search-api
             displayName: "Compilar search-api"
 
           - task: PublishPipelineArtifact@1
@@ -83,7 +83,7 @@ stages:
         displayName: "Compilar cursos-api"
         steps:
           - script: |
-              brew install go@1.24
+              brew install go@1.24 || true
               export PATH="/usr/local/opt/go@1.24/bin:$PATH"
               go version
             displayName: "Instalar Go 1.24 vía Homebrew"
@@ -92,7 +92,7 @@ stages:
               cd tp4/backend/cursos-api
               go mod tidy
               mkdir -p dist/bin
-              go build -o dist/bin/cursos-api ./...
+              go build -o dist/bin/cursos-api ./cmd/cursos-api
             displayName: "Compilar cursos-api"
 
           - task: PublishPipelineArtifact@1
@@ -106,7 +106,7 @@ stages:
         displayName: "Compilar users-api"
         steps:
           - script: |
-              brew install go@1.24
+              brew install go@1.24 || true
               export PATH="/usr/local/opt/go@1.24/bin:$PATH"
               go version
             displayName: "Instalar Go 1.24 vía Homebrew"
@@ -115,7 +115,7 @@ stages:
               cd tp4/backend/users-api
               go mod tidy
               mkdir -p dist/bin
-              go build -o dist/bin/users-api ./...
+              go build -o dist/bin/users-api ./cmd/users-api
             displayName: "Compilar users-api"
 
           - task: PublishPipelineArtifact@1
