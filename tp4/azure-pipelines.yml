@@ -46,7 +46,7 @@ stages:
               cd tp4/backend/admin-api
               go mod tidy
               mkdir -p dist/bin
-              go build -o dist/bin/admin-api ./cmd/admin-api
+              go build -o dist/bin/admin-api .
             displayName: "Compilar admin-api"
 
           - task: PublishPipelineArtifact@1
@@ -69,7 +69,7 @@ stages:
               cd tp4/backend/search-api
               go mod tidy
               mkdir -p dist/bin
-              go build -o dist/bin/search-api ./cmd/search-api
+              go build -o dist/bin/search-api .
             displayName: "Compilar search-api"
 
           - task: PublishPipelineArtifact@1
@@ -92,7 +92,7 @@ stages:
               cd tp4/backend/cursos-api
               go mod tidy
               mkdir -p dist/bin
-              go build -o dist/bin/cursos-api ./cmd/cursos-api
+              go build -o dist/bin/cursos-api .
             displayName: "Compilar cursos-api"
 
           - task: PublishPipelineArtifact@1
@@ -115,7 +115,7 @@ stages:
               cd tp4/backend/users-api
               go mod tidy
               mkdir -p dist/bin
-              go build -o dist/bin/users-api ./cmd/users-api
+              go build -o dist/bin/users-api .
             displayName: "Compilar users-api"
 
           - task: PublishPipelineArtifact@1
