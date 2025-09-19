@@ -1,9 +1,3 @@
-trigger:
-  - main
-
-pool:
-  vmImage: ubuntu-latest
-
 stages:
   - stage: CI
     displayName: "Build CI"
@@ -20,11 +14,11 @@ stages:
           
           - script: |
               cd tp4/frontend
-              npm install   # si no tenés package-lock.json válido
+              npm install
               npm run build
             displayName: "Instalar dependencias y compilar frontend"
 
-         # Publicar el frontend como artefacto
+          # Publicar el frontend como artefacto
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: 'tp4/frontend/dist'
@@ -43,10 +37,10 @@ stages:
           - script: |
               cd tp4/backend/admin-api
               go mod tidy
-              go build ./...
+              go build -o dist/bin/admin-api ./...
             displayName: "Compilar admin-api"
 
-           # Publicar binario
+          # Publicar binario
           - task: PublishPipelineArtifact@1
             inputs:
               targetPath: 'tp4/backend/admin-api/dist/bin'
@@ -60,19 +54,18 @@ stages:
           - task: GoTool@0
             inputs:
               version: '1.24.x'
+
           - script: |
               cd tp4/backend/search-api
               go mod tidy
-              go build ./...
+              go build -o dist/bin/search-api ./...
             displayName: "Compilar search-api"
 
           - task: PublishPipelineArtifact@1
-                      inputs:
-                        targetPath: 'tp4/backend/search-api/dist/bin'
-                        artifact: 'search-api-bin'
-                      displayName: "Publicar artefacto search-api"
-
-  
+            inputs:
+              targetPath: 'tp4/backend/search-api/dist/bin'
+              artifact: 'search-api-bin'
+            displayName: "Publicar artefacto search-api"
 
       # ----------------- CURSOS API -----------------
       - job: BuildCursosApi
@@ -81,17 +74,18 @@ stages:
           - task: GoTool@0
             inputs:
               version: '1.24.x'
+
           - script: |
               cd tp4/backend/cursos-api
               go mod tidy
-              go build ./...
+              go build -o dist/bin/cursos-api ./...
             displayName: "Compilar cursos-api"
 
           - task: PublishPipelineArtifact@1
-          inputs:
-            targetPath: 'tp4/backend/cursos-api/dist/bin'
-            artifact: 'cursos-api-bin'
-          displayName: "Publicar artefacto cursos-api"
+            inputs:
+              targetPath: 'tp4/backend/cursos-api/dist/bin'
+              artifact: 'cursos-api-bin'
+            displayName: "Publicar artefacto cursos-api"
 
       # ----------------- USERS API -----------------
       - job: BuildUsersApi
@@ -100,16 +94,15 @@ stages:
           - task: GoTool@0
             inputs:
               version: '1.24.x'
+
           - script: |
               cd tp4/backend/users-api
               go mod tidy
-              go build ./...
+              go build -o dist/bin/users-api ./...
             displayName: "Compilar users-api"
 
           - task: PublishPipelineArtifact@1
-              inputs:
-                targetPath: 'tp4/backend/users-api/dist/bin'
-                artifact: 'users-api-bin'
-              displayName: "Publicar artefacto users-api"
-
-      
+            inputs:
+              targetPath: 'tp4/backend/users-api/dist/bin'
+              artifact: 'users-api-bin'
+            displayName: "Publicar artefacto users-api"
