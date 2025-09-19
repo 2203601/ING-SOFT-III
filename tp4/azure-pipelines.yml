@@ -24,6 +24,13 @@ stages:
               npm run build
             displayName: "Instalar dependencias y compilar frontend"
 
+         # Publicar el frontend como artefacto
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: 'tp4/frontend/dist'
+              artifact: 'frontend-dist'
+            displayName: "Publicar artefacto frontend"
+
       # ----------------- ADMIN API -----------------
       - job: BuildAdminApi
         displayName: "Compilar admin-api"
@@ -39,6 +46,13 @@ stages:
               go build ./...
             displayName: "Compilar admin-api"
 
+           # Publicar binario
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: 'tp4/backend/admin-api/dist/bin'
+              artifact: 'admin-api-bin'
+            displayName: "Publicar artefacto admin-api"
+
       # ----------------- SEARCH API -----------------
       - job: BuildSearchApi
         displayName: "Compilar search-api"
@@ -51,6 +65,14 @@ stages:
               go mod tidy
               go build ./...
             displayName: "Compilar search-api"
+
+          - task: PublishPipelineArtifact@1
+                      inputs:
+                        targetPath: 'tp4/backend/search-api/dist/bin'
+                        artifact: 'search-api-bin'
+                      displayName: "Publicar artefacto search-api"
+
+  
 
       # ----------------- CURSOS API -----------------
       - job: BuildCursosApi
@@ -65,6 +87,12 @@ stages:
               go build ./...
             displayName: "Compilar cursos-api"
 
+          - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: 'tp4/backend/cursos-api/dist/bin'
+            artifact: 'cursos-api-bin'
+          displayName: "Publicar artefacto cursos-api"
+
       # ----------------- USERS API -----------------
       - job: BuildUsersApi
         displayName: "Compilar users-api"
@@ -78,14 +106,10 @@ stages:
               go build ./...
             displayName: "Compilar users-api"
 
-      # ----------------- LEVANTAR CONTENEDORES -----------------
-      - job: LevantarTodo
-        displayName: "Levantar todos los servicios con Docker Compose"
-        steps:
-          - task: DockerInstaller@0
-            displayName: "Instalar Docker"
-          
-          - script: |
-              docker-compose -f docker-compose.yml build
-              docker-compose -f docker-compose.yml up -d
-            displayName: "Construir y levantar todos los contenedores"
+          - task: PublishPipelineArtifact@1
+              inputs:
+                targetPath: 'tp4/backend/users-api/dist/bin'
+                artifact: 'users-api-bin'
+              displayName: "Publicar artefacto users-api"
+
+      
