@@ -2,7 +2,7 @@ trigger:
   - main
 
 pool:
-  name: SelfHosted
+  name: SelfHosted  # O cualquier agente que tengas
 
 stages:
   - stage: CI
@@ -36,10 +36,11 @@ stages:
       - job: BuildAdminApi
         displayName: "Compilar admin-api"
         steps:
-          - task: GoTool@0
-            inputs:
-              version: '1.24.x'
-            displayName: "Instalar Go"
+          - script: |
+              brew install go@1.24
+              export PATH="/usr/local/opt/go@1.24/bin:$PATH"
+              go version
+            displayName: "Instalar Go 1.24 vía Homebrew"
 
           - script: |
               cd tp4/backend/admin-api
@@ -58,10 +59,11 @@ stages:
       - job: BuildSearchApi
         displayName: "Compilar search-api"
         steps:
-          - task: GoTool@0
-            inputs:
-              version: '1.24.x'
-            displayName: "Instalar Go"
+          - script: |
+              brew install go@1.24
+              export PATH="/usr/local/opt/go@1.24/bin:$PATH"
+              go version
+            displayName: "Instalar Go 1.24 vía Homebrew"
 
           - script: |
               cd tp4/backend/search-api
@@ -80,10 +82,11 @@ stages:
       - job: BuildCursosApi
         displayName: "Compilar cursos-api"
         steps:
-          - task: GoTool@0
-            inputs:
-              version: '1.24.x'
-            displayName: "Instalar Go"
+          - script: |
+              brew install go@1.24
+              export PATH="/usr/local/opt/go@1.24/bin:$PATH"
+              go version
+            displayName: "Instalar Go 1.24 vía Homebrew"
 
           - script: |
               cd tp4/backend/cursos-api
@@ -102,10 +105,11 @@ stages:
       - job: BuildUsersApi
         displayName: "Compilar users-api"
         steps:
-          - task: GoTool@0
-            inputs:
-              version: '1.24.x'
-            displayName: "Instalar Go"
+          - script: |
+              brew install go@1.24
+              export PATH="/usr/local/opt/go@1.24/bin:$PATH"
+              go version
+            displayName: "Instalar Go 1.24 vía Homebrew"
 
           - script: |
               cd tp4/backend/users-api
