@@ -99,3 +99,5 @@ stages:
               targetPath: '$(System.DefaultWorkingDirectory)/tp4/backend/users-api/dist/bin'
               artifact: 'users-api-bin'
             displayName: "Publicar artefacto users-api"
+
+# Última modificación: 2025-09-19
