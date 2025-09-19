@@ -1,114 +1,73 @@
 trigger:
-  branches:
-    include:
-      - main
+  - main
+
+pool:
+  vmImage: ubuntu-latest
 
 stages:
   - stage: CI
-    displayName: "Integración Continua"
+    displayName: "Build CI"
     jobs:
-      # ========================
-      # FRONTEND
-      # ========================
-      - job: Build_Frontend
+      - job: BuildFrontend
         displayName: "Build Frontend"
-        pool:
-          vmImage: "ubuntu-latest"
         steps:
           - task: NodeTool@0
             inputs:
-              versionSpec: "18.x"
+              versionSpec: '18.x'
             displayName: "Usar Node.js"
-
+          
           - script: |
-              cd frontend
-              ls -la
-              npm ci
+              cd tp4/frontend
+              npm install   # en lugar de npm ci si no tenés package-lock.json válido
               npm run build
             displayName: "Instalar dependencias y compilar frontend"
 
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: "frontend/dist"
-              ArtifactName: "frontend"
-              publishLocation: "Container"
-
-      # ========================
-      # USERS-API
-      # ========================
-      - job: Build_UsersAPI
-        displayName: "Build users-api"
-        pool:
-          vmImage: "ubuntu-latest"
+      - job: BuildAdminApi
+        displayName: "Compilar admin-api"
         steps:
-          - script: |
-              cd backend/users-api
-              go mod tidy
-              go build -o ../../bin/users-api ./...
-            displayName: "Compilar users-api"
-
-          - task: PublishBuildArtifacts@1
+          - task: GoTool@0
             inputs:
-              PathtoPublish: "backend/bin"
-              ArtifactName: "users-api"
-              publishLocation: "Container"
+              version: '1.24.x'
+            displayName: "Usar Go"
 
-      # ========================
-      # CURSOS-API
-      # ========================
-      - job: Build_CursosAPI
-        displayName: "Build cursos-api"
-        pool:
-          vmImage: "ubuntu-latest"
-        steps:
           - script: |
-              cd backend/cursos-api
+              cd tp4/backend/admin-api
               go mod tidy
-              go build -o ../../bin/cursos-api ./...
-            displayName: "Compilar cursos-api"
-
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: "backend/bin"
-              ArtifactName: "cursos-api"
-              publishLocation: "Container"
-
-      # ========================
-      # SEARCH-API
-      # ========================
-      - job: Build_SearchAPI
-        displayName: "Build search-api"
-        pool:
-          vmImage: "ubuntu-latest"
-        steps:
-          - script: |
-              cd backend/search-api
-              go mod tidy
-              go build -o ../../bin/search-api ./...
-            displayName: "Compilar search-api"
-
-          - task: PublishBuildArtifacts@1
-            inputs:
-              PathtoPublish: "backend/bin"
-              ArtifactName: "search-api"
-              publishLocation: "Container"
-
-      # ========================
-      # ADMIN-API
-      # ========================
-      - job: Build_AdminAPI
-        displayName: "Build admin-api"
-        pool:
-          vmImage: "ubuntu-latest"
-        steps:
-          - script: |
-              cd backend/admin-api
-              go mod tidy
-              go build -o ../../bin/admin-api ./...
+              go build ./...
             displayName: "Compilar admin-api"
 
-          - task: PublishBuildArtifacts@1
+      - job: BuildSearchApi
+        displayName: "Compilar search-api"
+        steps:
+          - task: GoTool@0
             inputs:
-              PathtoPublish: "backend/bin"
-              ArtifactName: "admin-api"
-              publishLocation: "Container"
+              version: '1.24.x'
+          - script: |
+              cd tp4/backend/search-api
+              go mod tidy
+              go build ./...
+            displayName: "Compilar search-api"
+
+      - job: BuildCursosApi
+        displayName: "Compilar cursos-api"
+        steps:
+          - task: GoTool@0
+            inputs:
+              version: '1.24.x'
+          - script: |
+              cd tp4/backend/cursos-api
+              go mod tidy
+              go build ./...
+            displayName: "Compilar cursos-api"
+
+      - job: BuildUsersApi
+        displayName: "Compilar users-api"
+        steps:
+          - task: GoTool@0
+            inputs:
+              version: '1.24.x'
+          - script: |
+              cd tp4/backend/users-api
+              go mod tidy
+              go build ./...
+            displayName: "Compilar users-api"
