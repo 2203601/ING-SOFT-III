@@ -1,9 +1,75 @@
 trigger:
-- main
+  branches:
+    include:
+      - main
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+  - stage: CI
+    displayName: "Integración Continua"
+    jobs:
+      - job: Build_Frontend
+        displayName: "Build Frontend"
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "18.x"
+            displayName: "Usar Node.js"
 
-steps:
-- script: echo "Hello Azure Pipelines!"
-  displayName: 'Run a one-line script'
+          - script: |
+              cd frontend
+              npm ci
+              npm run build
+            displayName: "Instalar dependencias y compilar frontend"
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "frontend/dist"
+              ArtifactName: "frontend"
+              publishLocation: "Container"
+
+      - job: Build_Backend
+        displayName: "Build Backend (Go)"
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: GoTool@0
+            inputs:
+              version: "1.22"
+            displayName: "Usar Go 1.22"
+
+          - script: |
+              cd backend
+              go mod tidy
+              go build -o bin/app ./...
+            displayName: "Compilar backend Go"
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "backend/bin"
+              ArtifactName: "backend"
+              publishLocation: "Container"
+
+  - stage: CD
+    displayName: "Despliegue QA"
+    dependsOn: CI
+    condition: succeeded()
+    jobs:
+      - job: Deploy_QA
+        displayName: "Levantar ambiente con Docker Compose"
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              artifactName: "frontend"
+              downloadPath: $(Build.SourcesDirectory)/frontend/dist
+          - task: DownloadBuildArtifacts@0
+            inputs:
+              artifactName: "backend"
+              downloadPath: $(Build.SourcesDirectory)/backend/bin
+
+          - script: |
+              docker-compose -f docker-compose.yml up --build -d
+            displayName: "Levantar servicios con Docker Compose"
