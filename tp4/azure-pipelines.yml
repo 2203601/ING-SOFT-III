@@ -7,7 +7,11 @@ stages:
   - stage: CI
     displayName: "Integración Continua"
     jobs:
+      # ========================
+      # FRONTEND
+      # ========================
       - job: Build_Frontend
+        displayName: "Build Frontend"
         pool:
           vmImage: "ubuntu-latest"
         steps:
@@ -29,19 +33,82 @@ stages:
               ArtifactName: "frontend"
               publishLocation: "Container"
 
-      - job: Build_Backend
+      # ========================
+      # USERS-API
+      # ========================
+      - job: Build_UsersAPI
+        displayName: "Build users-api"
         pool:
           vmImage: "ubuntu-latest"
         steps:
           - script: |
-              go version
-              cd backend
+              cd backend/users-api
               go mod tidy
-              go build -o bin/app ./...
-            displayName: "Compilar backend Go"
+              go build -o ../../bin/users-api ./...
+            displayName: "Compilar users-api"
 
           - task: PublishBuildArtifacts@1
             inputs:
               PathtoPublish: "backend/bin"
-              ArtifactName: "backend"
+              ArtifactName: "users-api"
+              publishLocation: "Container"
+
+      # ========================
+      # CURSOS-API
+      # ========================
+      - job: Build_CursosAPI
+        displayName: "Build cursos-api"
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - script: |
+              cd backend/cursos-api
+              go mod tidy
+              go build -o ../../bin/cursos-api ./...
+            displayName: "Compilar cursos-api"
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "backend/bin"
+              ArtifactName: "cursos-api"
+              publishLocation: "Container"
+
+      # ========================
+      # SEARCH-API
+      # ========================
+      - job: Build_SearchAPI
+        displayName: "Build search-api"
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - script: |
+              cd backend/search-api
+              go mod tidy
+              go build -o ../../bin/search-api ./...
+            displayName: "Compilar search-api"
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "backend/bin"
+              ArtifactName: "search-api"
+              publishLocation: "Container"
+
+      # ========================
+      # ADMIN-API
+      # ========================
+      - job: Build_AdminAPI
+        displayName: "Build admin-api"
+        pool:
+          vmImage: "ubuntu-latest"
+        steps:
+          - script: |
+              cd backend/admin-api
+              go mod tidy
+              go build -o ../../bin/admin-api ./...
+            displayName: "Compilar admin-api"
+
+          - task: PublishBuildArtifacts@1
+            inputs:
+              PathtoPublish: "backend/bin"
+              ArtifactName: "admin-api"
               publishLocation: "Container"
