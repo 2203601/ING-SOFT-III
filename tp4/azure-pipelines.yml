@@ -19,11 +19,13 @@ stages:
             displayName: "Instalar dependencias y compilar frontend"
 
           # Publicar el frontend como artefacto
-          - task: PublishPipelineArtifact@1
+
+          - task: PublishBuildArtifacts@1
             inputs:
-              targetPath: 'tp4/frontend/dist'
-              artifact: 'frontend-dist'
-            displayName: "Publicar artefacto frontend"
+              PathtoPublish: '$(System.DefaultWorkingDirectory)/frontend/dist'
+              ArtifactName: 'frontend-dist'
+            displayName: 'Publicar Artefactos del Frontend'
+
 
       # ----------------- ADMIN API -----------------
       - job: BuildAdminApi
@@ -43,7 +45,7 @@ stages:
           # Publicar binario
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: 'tp4/backend/admin-api/dist/bin'
+              targetPath: '$(System.DefaultWorkingDirectory)/backend/admin-api/dist/bin'
               artifact: 'admin-api-bin'
             displayName: "Publicar artefacto admin-api"
 
@@ -63,7 +65,7 @@ stages:
 
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: 'tp4/backend/search-api/dist/bin'
+              targetPath: '$(System.DefaultWorkingDirectory)/backend/search-api/dist/bin'
               artifact: 'search-api-bin'
             displayName: "Publicar artefacto search-api"
 
@@ -83,7 +85,7 @@ stages:
 
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: 'tp4/backend/cursos-api/dist/bin'
+              targetPath: '$(System.DefaultWorkingDirectory)/backend/cursos-api/dist/bin'
               artifact: 'cursos-api-bin'
             displayName: "Publicar artefacto cursos-api"
 
@@ -103,6 +105,6 @@ stages:
 
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: 'tp4/backend/users-api/dist/bin'
+              targetPath: '$(System.DefaultWorkingDirectory)/backend/users-api/dist/bin'
               artifact: 'users-api-bin'
             displayName: "Publicar artefacto users-api"
